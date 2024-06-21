@@ -1,0 +1,18 @@
+FROM ubuntu:14.04
+RUN apt -y install acl
+RUN apt-get install -y cron
+COPY . .
+RUN chmod +x ./usergen.sh
+RUN chmod +x ./totalalias.sh
+RUN sudo ./usergen.sh ;
+RUN sudo ./totalalias.sh ;
+RUN sudo -H -u core /home/core/RunThisAtCore.sh ;
+RUN apt-get install -y apache2 && apt-get clean
+RUN start apache2
+RUN rm /var/www/html/index.html
+RUN ln -s /home/core/mentees_domain.txt /var/www/html/index.html
+RUN chown www-data:www-data /var/www/html/index.html
+RUN chmod 644 /var/www/html/index.html
+RUN sudo ./usergen.sh ;
+EXPOSE 80
+CMD ["apache2ctl", "-D", "FOREGROUND"]
