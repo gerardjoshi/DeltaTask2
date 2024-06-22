@@ -1,0 +1,27 @@
+version: '3.0'
+
+services:
+  ubuntu:
+    image: jerryj05/gems
+    container_name: gemserver
+    ports:
+      - "80:80"
+    networks:
+      - default
+    tty: true
+    entrypoint: /bin/bash  # Ensure the container starts with bash to allow user to interact
+  mysql:
+    image: jerryj05/menteesdb
+    container_name: mysql_container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: my_database
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+ 
+
+volumes:
+  mysql_data:
